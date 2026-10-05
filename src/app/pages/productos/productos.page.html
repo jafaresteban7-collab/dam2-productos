@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/inicio"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Productos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h1>Listado de productos</h1>
+
+  <ion-button routerLink="/inicio" fill="outline">
+    Volver a inicio
+  </ion-button>
+
+  @if (loading()) {
+    <div class="loading">
+      <ion-spinner></ion-spinner>
+      <p>Cargando productos...</p>
+    </div>
+  }
+
+  @if (error()) {
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Error</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ error() }}</p>
+        <ion-button (click)="loadProducts()">Reintentar</ion-button>
+      </ion-card-content>
+    </ion-card>
+  }
+
+  @if (!loading() && !error()) {
+    <p>
+      Productos cargados: <strong>{{ products().length }}</strong>
+    </p>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th>Marca</th>
+            <th>Ancho</th>
+            <th>Alto</th>
+            <th>Precio</th>
+            <th>Descuento</th>
+            <th>Valoración</th>
+            <th>Stock</th>
+            <th>Stock valorado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (product of products(); track product.id) {
+            <tr>
+              <td>{{ product.id }}</td>
+              <td>
+                <div class="product">
+                  <img [src]="product.thumbnail" [alt]="product.title">
+                  <span>{{ product.title }}</span>
+                </div>
+              </td>
+              <td>{{ product.category }}</td>
+              <td>{{ product.brand || 'Sin marca' }}</td>
+              <td>{{ product.dimensions.width | number:'1.0-2' }}</td>
+              <td>{{ product.dimensions.height | number:'1.0-2' }}</td>
+              <td>{{ product.price | currency:'EUR' }}</td>
+              <td>{{ product.discountPercentage | number:'1.0-2' }} %</td>
+              <td>⭐ {{ product.rating }}</td>
+              <td>{{ product.stock }}</td>
+              <td>{{ stockValue(product) | currency:'EUR' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</ion-content>
