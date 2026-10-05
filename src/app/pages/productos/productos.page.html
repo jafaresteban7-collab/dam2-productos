@@ -35,7 +35,8 @@
 
   @if (!loading() && !error()) {
     <p>
-      Productos cargados: <strong>{{ products().length }}</strong>
+      Mostrando <strong>{{ products().length }}</strong> de
+      <strong>{{ total() }}</strong> productos
     </p>
 
     <div class="table-container">
@@ -78,6 +79,16 @@
           }
         </tbody>
       </table>
+    </div>
+
+    <div class="pagination">
+      <ion-button (click)="prevPage()" [disabled]="page() === 1">
+        Anterior
+      </ion-button>
+      <span>Página {{ page() }} de {{ totalPages() }}</span>
+      <ion-button (click)="nextPage()" [disabled]="page() >= totalPages()">
+        Siguiente
+      </ion-button>
     </div>
   }
 </ion-content>
