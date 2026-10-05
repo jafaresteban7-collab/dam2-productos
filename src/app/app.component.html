@@ -1,3 +1,6 @@
 <ion-app>
   <ion-router-outlet></ion-router-outlet>
+  <ion-button class="theme-toggle" size="small" (click)="toggleDark()">
+    {{ dark() ? '☀️ Modo claro' : '🌙 Modo oscuro' }}
+  </ion-button>
 </ion-app>
