@@ -3,45 +3,136 @@
   padding: 40px;
 }
 
-.table-container {
-  width: 100%;
-  overflow-x: auto;
+/* ---------- Tarjetas de resumen (KPIs) ---------- */
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
 }
 
-table {
-  width: 100%;
-  min-width: 1100px;
-  border-collapse: collapse;
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--ion-color-step-100, #f2f2f2);
+  border-left: 5px solid var(--ion-color-primary);
 }
 
-th,
-td {
-  padding: 12px;
-  border-bottom: 1px solid var(--ion-color-step-150, #ddd);
-  text-align: left;
+.kpi-label {
+  font-size: 0.8rem;
+  color: var(--ion-color-medium);
 }
 
-th {
-  background: var(--ion-color-primary);
-  color: white;
+.kpi-value {
+  font-size: 1.5rem;
 }
 
-.product {
+/* ---------- Cuadrícula de productos ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.product-card {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.img-wrap {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  height: 180px;
+  background: var(--ion-color-step-100, #f2f2f2);
+
+  img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
 }
 
-.product img {
-  width: 50px;
-  height: 50px;
-  object-fit: contain;
+.discount {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.85rem;
 }
 
+.title {
+  font-size: 1.05rem;
+}
+
+/* ---------- Precio ---------- */
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 10px;
+
+  .now {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--ion-color-primary);
+  }
+
+  .old {
+    text-decoration: line-through;
+    color: var(--ion-color-medium);
+  }
+}
+
+/* ---------- Valoración ---------- */
+.rating {
+  margin-bottom: 10px;
+
+  .bar {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--ion-color-step-150, #ddd);
+    margin-bottom: 4px;
+
+    span {
+      display: block;
+      height: 100%;
+      border-radius: 3px;
+      background: var(--ion-color-warning);
+    }
+  }
+}
+
+/* ---------- Detalles ---------- */
+.details {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--ion-color-step-150, #ddd);
+    font-size: 0.9rem;
+  }
+
+  .highlight {
+    border-bottom: none;
+    font-weight: 700;
+    color: var(--ion-color-success);
+  }
+}
+
+/* ---------- Paginación ---------- */
 .pagination {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 16px;
-  margin-top: 16px;
+  margin-top: 20px;
 }

@@ -8,7 +8,7 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <h1>Listado de productos</h1>
+  <h1>Dashboard de productos</h1>
 
   <ion-button routerLink="/inicio" fill="outline">
     Volver a inicio
@@ -34,52 +34,74 @@
   }
 
   @if (!loading() && !error()) {
-    <p>
-      Mostrando <strong>{{ products().length }}</strong> de
-      <strong>{{ total() }}</strong> productos
-    </p>
+    <section class="kpis">
+      <div class="kpi">
+        <span class="kpi-label">Productos en catálogo</span>
+        <strong class="kpi-value">{{ total() }}</strong>
+      </div>
+      <div class="kpi">
+        <span class="kpi-label">Valoración media (página)</span>
+        <strong class="kpi-value">⭐ {{ avgRating() | number:'1.1-1' }}</strong>
+      </div>
+      <div class="kpi">
+        <span class="kpi-label">Stock valorado (página)</span>
+        <strong class="kpi-value">{{ pageStockValue() | currency:'EUR' }}</strong>
+      </div>
+    </section>
 
-    <div class="table-container">
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Producto</th>
-            <th>Categoría</th>
-            <th>Marca</th>
-            <th>Ancho</th>
-            <th>Alto</th>
-            <th>Precio</th>
-            <th>Descuento</th>
-            <th>Valoración</th>
-            <th>Stock</th>
-            <th>Stock valorado</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (product of products(); track product.id) {
-            <tr>
-              <td>{{ product.id }}</td>
-              <td>
-                <div class="product">
-                  <img [src]="product.thumbnail" [alt]="product.title">
-                  <span>{{ product.title }}</span>
-                </div>
-              </td>
-              <td>{{ product.category }}</td>
-              <td>{{ product.brand || 'Sin marca' }}</td>
-              <td>{{ product.dimensions.width | number:'1.0-2' }}</td>
-              <td>{{ product.dimensions.height | number:'1.0-2' }}</td>
-              <td>{{ product.price | currency:'EUR' }}</td>
-              <td>{{ product.discountPercentage | number:'1.0-2' }} %</td>
-              <td>⭐ {{ product.rating }}</td>
-              <td>{{ product.stock }}</td>
-              <td>{{ stockValue(product) | currency:'EUR' }}</td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    </div>
+    <section class="grid">
+      @for (product of products(); track product.id) {
+        <ion-card class="product-card">
+          <div class="img-wrap">
+            <img [src]="product.thumbnail" [alt]="product.title">
+            @if (product.discountPercentage > 0) {
+              <ion-badge color="danger" class="discount">
+                -{{ product.discountPercentage | number:'1.0-0' }}%
+              </ion-badge>
+            }
+          </div>
+
+          <ion-card-header>
+            <ion-card-subtitle>
+              {{ product.category }} · {{ product.brand || 'Sin marca' }}
+            </ion-card-subtitle>
+            <ion-card-title class="title">{{ product.title }}</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <div class="price">
+              <span class="now">{{ finalPrice(product) | currency:'EUR' }}</span>
+              <span class="old">{{ product.price | currency:'EUR' }}</span>
+            </div>
+
+            <div class="rating">
+              <div class="bar">
+                <span [style.width.%]="product.rating / 5 * 100"></span>
+              </div>
+              <small>⭐ {{ product.rating }} / 5</small>
+            </div>
+
+            <ul class="details">
+              <li>
+                <span>Ancho × Alto</span>
+                <strong>
+                  {{ product.dimensions.width | number:'1.0-2' }} ×
+                  {{ product.dimensions.height | number:'1.0-2' }}
+                </strong>
+              </li>
+              <li>
+                <span>Stock</span>
+                <strong>{{ product.stock }} uds.</strong>
+              </li>
+              <li class="highlight">
+                <span>Stock valorado</span>
+                <strong>{{ stockValue(product) | currency:'EUR' }}</strong>
+              </li>
+            </ul>
+          </ion-card-content>
+        </ion-card>
+      }
+    </section>
 
     <div class="pagination">
       <ion-button (click)="prevPage()" [disabled]="page() === 1">

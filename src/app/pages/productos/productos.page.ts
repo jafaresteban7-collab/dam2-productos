@@ -12,7 +12,9 @@ import {
   IonCard,
   IonCardHeader,
   IonCardTitle,
+  IonCardSubtitle,
   IonCardContent,
+  IonBadge,
   IonButton
 } from '@ionic/angular';
 import { Product, ProductsResponse } from '../../models/product.model';
@@ -37,7 +39,9 @@ import { ProductService } from '../../services/product.service';
     IonCard,
     IonCardHeader,
     IonCardTitle,
+    IonCardSubtitle,
     IonCardContent,
+    IonBadge,
     IonButton
   ]
 })
@@ -53,6 +57,18 @@ export class ProductosPage implements OnInit {
   error = signal('');
 
   totalPages = computed(() => Math.ceil(this.total() / this.pageSize));
+
+  // Indicadores del dashboard (sobre los productos de la página actual)
+  pageStockValue = computed(() =>
+    this.products().reduce((acc, p) => acc + this.stockValue(p), 0)
+  );
+
+  avgRating = computed(() => {
+    const list = this.products();
+    return list.length
+      ? list.reduce((acc, p) => acc + p.rating, 0) / list.length
+      : 0;
+  });
 
   ngOnInit(): void {
     this.loadProducts();
@@ -92,8 +108,13 @@ export class ProductosPage implements OnInit {
     }
   }
 
+  // Precio con el descuento aplicado
+  finalPrice(product: Product): number {
+    return product.price * (1 - product.discountPercentage / 100);
+  }
+
   // Stock valorado = unidades × precio con el descuento aplicado
   stockValue(product: Product): number {
-    return product.stock * product.price * (1 - product.discountPercentage / 100);
+    return product.stock * this.finalPrice(product);
   }
 }
